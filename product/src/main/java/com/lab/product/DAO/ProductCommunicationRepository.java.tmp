@@ -1,0 +1,15 @@
+package com.lab.product.DAO;
+
+import com.lab.product.entity.PRODUCT_COMMUNICATION;
+import com.lab.product.entity.PRODUCT_DETAILS;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.UUID;
+
+@Repository
+public interface ProductCommunicationRepository extends JpaRepository<PRODUCT_COMMUNICATION, UUID> {
+    Page<PRODUCT_COMMUNICATION> findByProduct(PRODUCT_DETAILS product, Pageable pageable);
+}
