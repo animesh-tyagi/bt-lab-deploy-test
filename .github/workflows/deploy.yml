@@ -1,40 +1,45 @@
-name: CI/CD Pipeline - Deploy to VM
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main   # or your default branch
+      - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Connect to VM and deploy
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        run: |
+          
+          sudo docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest .
+          sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+        working-directory: ./product
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH to VM and Deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.PORT }}
-          timeout: 30m
-          script_stop: true
           script: |
-            set -e  # fail fast if any command fails
-            cd ~/bt-lab-deploy-test/product
-            echo "Pulling latest code..."
-            git pull origin main
+            cd ~/bt-lab-product-test
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+            sudo docker stop myapp || true
+            sudo docker rm myapp || true
+            sudo docker run -d -p 8080:8080 --name myapp ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
 
-            echo "Stopping old containers..."
-            sudo docker compose down || true
 
-            echo "Building containers..."
-            sudo docker compose build --no-cache
-
-            echo "Starting containers in detached mode..."
-            sudo docker compose up -d
-
-            echo "Deployment completed successfully!"
