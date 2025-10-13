@@ -1,3 +1,3 @@
 # bt-lab-deploy-test
 
-deploye test 4
+deploy test 5
