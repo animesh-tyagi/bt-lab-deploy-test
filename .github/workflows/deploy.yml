@@ -20,10 +20,21 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
-          command_timeout: 30m
+          timeout: 30m
+          script_stop: true
           script: |
+            set -e  # fail fast if any command fails
             cd ~/bt-lab-deploy-test/product
+            echo "Pulling latest code..."
             git pull origin main
-            sudo docker compose down
+
+            echo "Stopping old containers..."
+            sudo docker compose down || true
+
+            echo "Building containers..."
             sudo docker compose build --no-cache
+
+            echo "Starting containers in detached mode..."
             sudo docker compose up -d
+
+            echo "Deployment completed successfully!"
