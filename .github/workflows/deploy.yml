@@ -21,8 +21,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd ~/project || git clone https://github.com/animesh-tyagi/bt-lab-deploy-test.git project
-            cd project
+            cd ~/bt-lab-deploy-test/product
             git pull origin main
             docker compose down
             docker compose build --no-cache
