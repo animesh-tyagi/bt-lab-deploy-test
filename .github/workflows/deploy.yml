@@ -19,10 +19,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push Docker Image
-        working-directory: ./product
         run: |
-          
-          sudo docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest .
+          sudo docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest ./product
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
           sudo docker push ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
         
   deploy:
