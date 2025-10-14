@@ -36,9 +36,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             cd ~/bt-lab-deploy-test
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d -p 8080:8080 --name myapp ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+            docker compose down || true
+            docker compose pull
+            docker compose up -d
 
 
