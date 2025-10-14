@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd ~/bt-lab-deploy-test
+            cd ~/bt-lab-deploy-test/product
             docker compose down || true
             docker compose pull
             docker compose up -d
