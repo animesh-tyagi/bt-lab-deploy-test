@@ -9,11 +9,6 @@ services:
       - "3307:3306" # external 3307 to avoid host port conflicts
     volumes:
       - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   product-pricing-app:
     image: animeshtyagi/myapp:latest
@@ -21,13 +16,13 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      mysql-container:
-        condition: service_healthy
+      - mysql-container
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/product_db
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_ADDRESS: 0.0.0.0
 
 volumes:
   mysql_data:
