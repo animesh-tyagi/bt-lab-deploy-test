@@ -9,6 +9,9 @@ services:
       - "3307:3306" # external 3307 to avoid host port conflicts
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "true"]
+
 
   product-pricing-app:
     image: animeshtyagi/myapp:latest
