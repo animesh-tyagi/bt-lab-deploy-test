@@ -1,3 +1,3 @@
 # bt-lab-deploy-test
 
-final
+test
