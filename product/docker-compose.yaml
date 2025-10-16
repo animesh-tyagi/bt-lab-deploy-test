@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   mysql-container:
     image: mysql:8
@@ -14,10 +12,10 @@ services:
       - mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot > /dev/null || exit 1"]
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 5
-      start_period: 30s
+      retries: 20
+      start_period: 120s
 
   product-pricing-app:
     image: animeshtyagi/myapp:latest
