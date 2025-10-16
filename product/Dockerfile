@@ -14,6 +14,9 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jdk-alpine
 
+#RUN apk add --no-cache mariadb-client bash
+
+
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
