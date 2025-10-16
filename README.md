@@ -1,3 +1,3 @@
 # bt-lab-deploy-test
 
-please god help
+Tests on 16th - 1
